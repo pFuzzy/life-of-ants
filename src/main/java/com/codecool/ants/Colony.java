@@ -78,24 +78,14 @@ public class Colony {
     }
 
     public void update() {
-        int positionX;
-        int positionY;
         for (Drone drone:drones) {
             drone.move();
         }
         for (Worker worker:workers) {
-            positionX = worker.getPosition().getX();
-            positionY = worker.getPosition().getY();
-            colony[positionX][positionY] = null;
-            worker.move();
-            positionX = worker.getPosition().getX();
-            positionY = worker.getPosition().getY();
-            if(colony[positionX][positionY] == null){
-                colony[positionX][positionY] = worker;
-            }
+            moveAnt(worker);
         }
         for (Soldier soldier:soldiers) {
-            soldier.move();
+            moveAnt(soldier);
         }
 
 
@@ -110,5 +100,19 @@ public class Colony {
             y = random.nextInt(WIDTH);
         }
         return new int[]{x,y};
+    }
+
+    public void moveAnt(Ant ant){
+        int positionX;
+        int positionY;
+        positionX = ant.getPosition().getX();
+        positionY = ant.getPosition().getY();
+        colony[positionX][positionY] = null;
+        ant.move();
+        positionX = ant.getPosition().getX();
+        positionY = ant.getPosition().getY();
+        if(colony[positionX][positionY] == null){
+            colony[positionX][positionY] = ant;
+        }
     }
 }
