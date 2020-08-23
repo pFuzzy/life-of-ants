@@ -1,24 +1,36 @@
 package com.codecool.ants;
 
+import java.io.IOException;
 import java.util.Scanner;
+
 
 public class Simulator {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Colony colony = new Colony(9);
         colony.generateAnts(2,2,2);
-        colony.placeAnts();
+        colony.getAntStartingPosition();
         colony.displayColony();
         boolean isRunning = true;
         Scanner input = new Scanner(System.in);
         while(isRunning){
-            if(input.nextLine().equals("q")){
-                isRunning = false;
-            }else if (input.nextLine().equals("")){
-                colony.update();
-                colony.displayColony();
+            switch (input.nextLine()){
+                case "q":
+                    isRunning = false;
+                    break;
+                case "":
+                    colony.update();
+                    colony.displayColony();
+                    break;
+                default:
+                    break;
             }
         }
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }

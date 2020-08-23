@@ -8,7 +8,7 @@ import java.util.Random;
 
 
 public class Colony {
-    private final int width;
+    public static int WIDTH;
     private final Ant[][] colony;
     private ArrayList<Drone> drones;
     private ArrayList<Worker> workers;
@@ -16,13 +16,13 @@ public class Colony {
 
 
     public Colony(int width) {
-        this.width = width;
+        WIDTH = width;
         colony = new Ant[width][width];
-        colony[(int) Math.floor(width / 2)][(int) Math.floor(width / 2)] = new Queen();
+        colony[(int) Math.floor(WIDTH / 2)][(int) Math.floor(WIDTH / 2)] = new Queen();
     }
 
     public void generateAnts(int drones, int workers, int soldiers) {
-        if((drones + workers + soldiers) > width*width-1){
+        if((drones + workers + soldiers) > WIDTH*WIDTH-1){
             throw new IllegalArgumentException("Number of ants cannot exceed size of hive");
         }
         this.drones = new ArrayList<>();
@@ -39,21 +39,21 @@ public class Colony {
         }
     }
 
-    public void placeAnts(){
+    public void getAntStartingPosition(){
         for (Drone drone: drones) {
             int[] position = getRandomPosition();
             drone.setPosition(new Position(position[0], position[1]));
-            colony[position[0]][position[1]] = drone;
+            colony[drone.getPosition().getX()][drone.getPosition().getY()] = drone;
         }
         for (Worker worker: workers) {
             int[] position = getRandomPosition();
             worker.setPosition(new Position(position[0], position[1]));
-            colony[position[0]][position[1]] = worker;
+            colony[worker.getPosition().getX()][worker.getPosition().getY()] = worker;
         }
         for (Soldier soldier: soldiers) {
             int[] position = getRandomPosition();
             soldier.setPosition(new Position(position[0], position[1]));
-            colony[position[0]][position[1]] = soldier;
+            colony[soldier.getPosition().getX()][soldier.getPosition().getY()] = soldier;
         }
 
     }
@@ -78,16 +78,36 @@ public class Colony {
     }
 
     public void update() {
+        int positionX;
+        int positionY;
+        for (Drone drone:drones) {
+            drone.move();
+        }
+        for (Worker worker:workers) {
+            positionX = worker.getPosition().getX();
+            positionY = worker.getPosition().getY();
+            colony[positionX][positionY] = null;
+            worker.move();
+            positionX = worker.getPosition().getX();
+            positionY = worker.getPosition().getY();
+            if(colony[positionX][positionY] == null){
+                colony[positionX][positionY] = worker;
+            }
+        }
+        for (Soldier soldier:soldiers) {
+            soldier.move();
+        }
+
 
     }
 
     public int[] getRandomPosition(){
         Random random = new Random();
-        int x = random.nextInt(width);
-        int y = random.nextInt(width);
+        int x = random.nextInt(WIDTH);
+        int y = random.nextInt(WIDTH);
         while(colony[x][y] != null){
-            x = random.nextInt(width);
-            y = random.nextInt(width);
+            x = random.nextInt(WIDTH);
+            y = random.nextInt(WIDTH);
         }
         return new int[]{x,y};
     }

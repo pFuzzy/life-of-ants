@@ -5,6 +5,13 @@ public class Queen extends Ant{
 
     @Override
     public void move() {
+    }
 
+    public boolean getMood(){
+        return this.mood;
+    }
+
+    public void changeMood(){
+        this.mood = !this.mood;
     }
 }

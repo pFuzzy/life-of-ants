@@ -5,7 +5,7 @@ import com.codecool.ants.geometry.Position;
 
 public abstract class Ant {
     private Position position;
-    private Direction direction;
+    private Direction direction = Direction.NORTH;
 
     public abstract void move();
 
